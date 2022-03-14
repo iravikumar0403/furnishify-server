@@ -61,34 +61,35 @@ router.post("/login", async (req, res) => {
     email: email,
   });
 
-  !user &&
+  if (!user) {
     res.status(401).json({
       message: "invalid credentials",
-    });
-
-  const result = await bcrypt.compare(password, user.password);
-
-  if (result) {
-    const token = jwt.sign(
-      {
-        id: user.id,
-      },
-      process.env.JWT_SEC,
-      { expiresIn: "2h" }
-    );
-    res.status(200).json({
-      token: token,
-      id: user.id,
-      name: user.name,
-      email: user.email,
-      address: user.address,
-      wishlist: user.wishlist,
-      cart: user.cart,
     });
   } else {
-    res.status(401).json({
-      message: "invalid credentials",
-    });
+    const result = await bcrypt.compare(password, user.password);
+
+    if (result) {
+      const token = jwt.sign(
+        {
+          id: user.id,
+        },
+        process.env.JWT_SEC,
+        { expiresIn: "2h" }
+      );
+      res.status(200).json({
+        token: token,
+        id: user.id,
+        name: user.name,
+        email: user.email,
+        address: user.address,
+        wishlist: user.wishlist,
+        cart: user.cart,
+      });
+    } else {
+      res.status(401).json({
+        message: "invalid credentials",
+      });
+    }
   }
 });
 
