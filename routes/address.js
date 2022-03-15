@@ -1,15 +1,16 @@
 const router = require("express").Router();
 const { verifyAuthentication } = require("../middleware/verifyAuth");
-const Cart = require("../models/Cart");
+const Address = require("../models/Address");
 
 router.get("/", verifyAuthentication, async (req, res) => {
   const { id } = req.user;
 
   try {
-    const cart = await Cart.find({
+    const address = await Address.find({
       userId: id,
     });
-    res.status(200).json(cart);
+    console.log(address);
+    res.status(200).json(address);
   } catch (error) {
     console.log(error);
     res.sendStatus(500);
@@ -17,24 +18,24 @@ router.get("/", verifyAuthentication, async (req, res) => {
 });
 
 router.post("/", verifyAuthentication, async (req, res) => {
-  const { products } = req.body;
+  const { address } = req.body;
   const { id } = req.user;
+  console.log(address, id);
   try {
-    const updatedCart = await Cart.findOneAndUpdate(
+    const updatedAddress = await Address.findOneAndUpdate(
       {
         userId: id,
       },
       {
         userId: id,
-        products,
+        address,
       },
       {
         returnDocument: "after",
         upsert: true,
       }
     );
-
-    res.status(200).json(updatedCart);
+    res.status(200).json(updatedAddress);
   } catch (error) {
     console.log(error);
     res.sendStatus(500);

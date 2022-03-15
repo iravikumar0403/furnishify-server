@@ -15,10 +15,6 @@ const userSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    address: {
-      type: Array,
-      default: [],
-    },
   },
   { timestamps: true }
 );

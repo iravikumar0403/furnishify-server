@@ -8,6 +8,7 @@ const verifyAuthentication = (req, res, next) => {
         res.status(401).json({
           message: "Authentication required",
         });
+        console.log(err);
       } else {
         req.user = user;
         next();
